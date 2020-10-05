@@ -3,6 +3,24 @@ entries:
   loki:
   - apiVersion: v2
     appVersion: 1.6.1
+    created: "2020-10-05T06:52:10.056469829Z"
+    description: Helm chart for Grafana Loki
+    digest: 0c3caee04d27c033bdaec26124583c44c2ef056ca78bec0dce825ddb3c89f7ee
+    home: https://github.com/unguiculus/loki-helm-chart
+    icon: https://grafana.com/docs/loki/latest/logo_and_name.png
+    maintainers:
+    - name: unguiculus
+    name: loki
+    sources:
+    - https://github.com/grafana/loki
+    - https://grafana.com/oss/loki/
+    - https://grafana.com/docs/loki/latest/
+    type: application
+    urls:
+    - https://github.com/unguiculus/loki-helm-chart/releases/download/loki-0.7.1/loki-0.7.1.tgz
+    version: 0.7.1
+  - apiVersion: v2
+    appVersion: 1.6.1
     created: "2020-10-05T05:49:23.086715326Z"
     description: Helm chart for Grafana Loki
     digest: 3f9c0ab8bf177cce4489d9559f4d0c1ce483debb79ae50ba84e9aa8e53e5c774
