@@ -1,6 +1,6 @@
 # loki-distributed
 
-![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.1](https://img.shields.io/badge/AppVersion-1.6.1-informational?style=flat-square)
+![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.1](https://img.shields.io/badge/AppVersion-1.6.1-informational?style=flat-square)
 
 Helm chart for Grafana Loki in microservices mode
 
@@ -193,6 +193,17 @@ helm repo add loki https://unguiculus.github.io/loki-helm-chart
 | tableManager.resources | object | `{}` | Resource requests and limits for the table-manager |
 | tableManager.terminationGracePeriodSeconds | int | `30` | Grace period to allow the table-manager to shutdown before it is killed |
 | tableManager.tolerations | list | `[]` | Tolerations for table-manager pods |
+| compactor.affinity | string | Hard node and soft zone anti-affinity | Affinity for compactor pods. Passed through `tpl` and, thus, to be configured as string |
+| compactor.enabled | bool | `false` | Specifies whether the compactor should be enabled |
+| compactor.extraArgs | list | `[]` | Additional CLI args for the compactor |
+| compactor.extraEnv | list | `[]` | Environment variables to add to the compactor pods |
+| compactor.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to the compactor pods |
+| compactor.nodeSelector | object | `{}` | Node selector for compactor pods |
+| compactor.podAnnotations | object | `{}` | Annotations for compactor pods |
+| compactor.replicas | int | `1` | Number of replicas for the compactor |
+| compactor.resources | object | `{}` | Resource requests and limits for the compactor |
+| compactor.terminationGracePeriodSeconds | int | `30` | Grace period to allow the compactor to shutdown before it is killed |
+| compactor.tolerations | list | `[]` | Tolerations for compactor pods |
 
 ## Configuration
 
@@ -215,75 +226,75 @@ Also, this allows using a separate YAML file which can be passed using `--set-fi
 
 ```yaml
 loki:
-  config: |
-    server:
-      log_level: info
-      # Must be set to 3100
-      http_listen_port: 3100
+    config: |
+      server:
+        log_level: info
+        # Must be set to 3100
+        http_listen_port: 3100
 
-    distributor:
-      ring:
-        kvstore:
-          store: memberlist
-
-    ingester:
-      # disable chunk transfer which is not possible with statefulsets
-      # and unnecessary for boltdb-shipper
-      max_transfer_retries: 0
-      lifecycler:
-        join_after: 0s
+      distributor:
         ring:
           kvstore:
             store: memberlist
 
-    memberlist:
-      join_members:
-        - {{ include "loki.fullname" . }}-memberlist
+      ingester:
+        # disable chunk transfer which is not possible with statefulsets
+        # and unnecessary for boltdb-shipper
+        max_transfer_retries: 0
+        lifecycler:
+          join_after: 0s
+          ring:
+            kvstore:
+              store: memberlist
 
-    limits_config:
-      ingestion_rate_mb: 10
-      ingestion_burst_size_mb: 20
-      max_concurrent_tail_requests: 20
+      memberlist:
+        join_members:
+          - {{ include "loki.fullname" . }}-memberlist
 
-    schema_config:
-      configs:
-        - from: 2020-09-07
-          store: boltdb-shipper
-          object_store: aws
-          schema: v11
-          index:
-            prefix: loki_index_
-            period: 24h
+      limits_config:
+        ingestion_rate_mb: 10
+        ingestion_burst_size_mb: 20
+        max_concurrent_tail_requests: 20
 
-    storage_config:
-      aws:
-        s3: s3://eu-central-1
-        bucketnames: my-loki-s3-bucket
-      boltdb_shipper:
-        active_index_directory: /var/loki/index
-        shared_store: s3
-        cache_location: /var/loki/cache
+      schema_config:
+        configs:
+          - from: 2020-09-07
+            store: boltdb-shipper
+            object_store: aws
+            schema: v11
+            index:
+              prefix: loki_index_
+              period: 24h
 
-    query_range:
-      # make queries more cache-able by aligning them with their step intervals
-      align_queries_with_step: true
-      max_retries: 5
-      # parallelize queries in 15min intervals
-      split_queries_by_interval: 15m
-      cache_results: true
+      storage_config:
+        aws:
+          s3: s3://eu-central-1
+          bucketnames: my-loki-s3-bucket
+        boltdb_shipper:
+          active_index_directory: /var/loki/index
+          shared_store: s3
+          cache_location: /var/loki/cache
 
-      results_cache:
-        max_freshness: 10m
-        cache:
-          enable_fifocache: true
-          fifocache:
-            max_size_items: 1024
-            validity: 24h
+      query_range:
+        # make queries more cache-able by aligning them with their step intervals
+        align_queries_with_step: true
+        max_retries: 5
+        # parallelize queries in 15min intervals
+        split_queries_by_interval: 15m
+        cache_results: true
 
-    frontend_worker:
-      frontend_address: {{ include "loki.queryFrontendFullname" . }}:9095
+        results_cache:
+          max_freshness: 10m
+          cache:
+            enable_fifocache: true
+            fifocache:
+              max_size_items: 1024
+              validity: 24h
 
-    frontend:
-      log_queries_longer_than: 5s
-      compress_responses: true
+      frontend_worker:
+        frontend_address: {{ include "loki.queryFrontendFullname" . }}:9095
+
+      frontend:
+        log_queries_longer_than: 5s
+        compress_responses: true
 ```

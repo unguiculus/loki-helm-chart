@@ -168,7 +168,7 @@ ingester:
     enabled: false
     # ingester.persistence.size -- Size of persistent disk
     size: 100Gi
-    # ngester.persistence.storageClass -- Storage class to be used.
+    # Ingester.persistence.storageClass -- Storage class to be used.
     # If defined, storageClassName: <storageClass>.
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
     # If empty (the default) or set to null, no storageClassName spec is
@@ -335,6 +335,54 @@ tableManager:
   nodeSelector: {}
   # tableManager.tolerations -- Tolerations for table-manager pods
   tolerations: []
+
+# Configuration for the compactor
+compactor:
+  # compactor.replicas -- Number of replicas for the compactor
+  replicas: 1
+  # compactor.podAnnotations -- Annotations for compactor pods
+  podAnnotations: {}
+  # compactor.extraArgs -- Additional CLI args for the compactor
+  extraArgs: []
+  # compactor.extraEnv -- Environment variables to add to the compactor pods
+  extraEnv: []
+  # compactor.extraEnvFrom -- Environment variables from secrets or configmaps to add to the compactor pods
+  extraEnvFrom: []
+  # compactor.resources -- Resource requests and limits for the compactor
+  resources: {}
+  # compactor.terminationGracePeriodSeconds -- Grace period to allow the compactor to shutdown before it is killed.
+  terminationGracePeriodSeconds: 30
+  # compactor.affinity -- Affinity for compactor pods. Passed through `tpl` and, thus, to be configured as string
+  # @default -- Hard node and soft zone anti-affinity
+  affinity: |
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              {{- include "loki.compactorSelectorLabels" . | nindent 10 }}
+          topologyKey: kubernetes.io/hostname
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                {{- include "loki.compactorSelectorLabels" . | nindent 12 }}
+            topologyKey: failure-domain.beta.kubernetes.io/zone
+  # compactor.nodeSelector -- Node selector for compactor pods
+  nodeSelector: {}
+  # compactor.tolerations -- Tolerations for compactor pods
+  tolerations: []
+  persistence:
+    # compactor.persistence.enabled -- Enable creating PVCs
+    enabled: false
+    # compactor.persistence.size -- Size of persistent disk
+    size: 100Gi
+    # Compactor.persistence.storageClass -- Storage class to be used.
+    # If defined, storageClassName: <storageClass>.
+    # If set to "-", storageClassName: "", which disables dynamic provisioning.
+    # If empty (the default) or set to null, no storageClassName spec is
+    # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
+    storageClass: ""
 
 # Configuration for the gateway
 gateway:
