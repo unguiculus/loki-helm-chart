@@ -8,6 +8,8 @@ fullnameOverride: ""
 imagePullSecrets: []
 
 loki:
+  rbac_enabled: false
+
   image:
     # loki.image.repository -- Docker image repository
     repository: grafana/loki

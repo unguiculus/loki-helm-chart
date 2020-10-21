@@ -1,0 +1,19 @@
+{{- if .Values.loki.rbac_enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "loki.fullname" . }}
+  labels:
+    {{- include "loki.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "loki.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "loki.fullname" . }}
+{{- end }}
