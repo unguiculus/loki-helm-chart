@@ -268,7 +268,44 @@ entries:
     urls:
     - https://github.com/unguiculus/loki-helm-chart/releases/download/loki-0.1.0/loki-0.1.0.tgz
     version: 0.1.0
+  loki-canary:
+  - apiVersion: v2
+    appVersion: 2.0.0
+    created: "2020-10-27T11:13:27.882432065Z"
+    description: Helm chart for Grafana Loki Canary
+    digest: 8299155896cc79d93f8be8d21c066b6c6e759c4d18566ff1d42e6a0feb734558
+    home: https://github.com/unguiculus/loki-helm-chart
+    icon: https://grafana.com/docs/loki/latest/logo_and_name.png
+    maintainers:
+    - name: unguiculus
+    name: loki-canary
+    sources:
+    - https://github.com/grafana/loki
+    - https://grafana.com/oss/loki/
+    - https://grafana.com/docs/loki/latest/
+    type: application
+    urls:
+    - https://github.com/unguiculus/loki-helm-chart/releases/download/loki-canary-0.1.0/loki-canary-0.1.0.tgz
+    version: 0.1.0
   loki-distributed:
+  - apiVersion: v2
+    appVersion: 1.6.1
+    created: "2020-10-27T11:13:28.002591644Z"
+    description: Helm chart for Grafana Loki in microservices mode
+    digest: 28f7dd6f29a56de982458475ae7f61686128fccf20f6272fd61b8c1239c144ec
+    home: https://github.com/unguiculus/loki-helm-chart
+    icon: https://grafana.com/docs/loki/latest/logo_and_name.png
+    maintainers:
+    - name: unguiculus
+    name: loki-distributed
+    sources:
+    - https://github.com/grafana/loki
+    - https://grafana.com/oss/loki/
+    - https://grafana.com/docs/loki/latest/
+    type: application
+    urls:
+    - https://github.com/unguiculus/loki-helm-chart/releases/download/loki-distributed-0.11.0/loki-distributed-0.11.0.tgz
+    version: 0.11.0
   - apiVersion: v2
     appVersion: 1.6.1
     created: "2020-10-26T08:09:42.161289802Z"
