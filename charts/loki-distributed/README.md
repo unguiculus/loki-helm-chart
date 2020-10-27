@@ -273,7 +273,6 @@ loki:
       cache_results: true
 
       results_cache:
-        max_freshness: 10m
         cache:
           enable_fifocache: true
           fifocache:
