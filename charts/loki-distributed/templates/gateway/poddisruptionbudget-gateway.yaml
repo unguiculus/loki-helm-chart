@@ -1,4 +1,4 @@
-{{- if gt (int .Values.gateway.replicas) 1 }}
+{{- if and .Values.gateway.enabled (gt (int .Values.gateway.replicas) 1) }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:

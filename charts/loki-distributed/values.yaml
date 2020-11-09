@@ -408,6 +408,8 @@ tableManager:
 
 # Configuration for the gateway
 gateway:
+  # gateway.enabled -- Specifies whether the gateway should be enabled
+  enabled: true
   # gateway.replicas -- Number of replicas for the gateway
   replicas: 1
   image:
