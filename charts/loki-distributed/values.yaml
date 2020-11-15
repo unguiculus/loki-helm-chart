@@ -776,199 +776,38 @@ ruler:
     #           expr: sum by(container) (rate({job=~"loki-dev/.*"}[1m])) > 1000
     #           for: 2m
 
-memcached:
-  image:
-    # -- The Docker registry for the memcached
-    registry: docker.io
-    # -- Memcached Docker image repository
-    repository: memcached
-    # -- Memcached Docker image tag
-    tag: 1.6.7-alpine
-    # -- Memcached Docker image pull policy
-    pullPolicy: IfNotPresent
-  # -- The SecurityContext for memcached pods
-  podSecurityContext:
-    fsGroup: 11211
-    runAsGroup: 11211
-    runAsNonRoot: true
-    runAsUser: 11211
-  # -- The SecurityContext for memcached containers
-  containerSecurityContext:
-    readOnlyRootFilesystem: true
-    capabilities:
-      drop:
-        - ALL
-    allowPrivilegeEscalation: false
-
-memcachedExporter:
-  # -- Specifies whether the Memcached Exporter should be enabled
-  enabled: false
-  image:
-    # -- The Docker registry for the Memcached Exporter
-    registry: docker.io
-    # -- Memcached Exporter Docker image repository
-    repository: prom/memcached-exporter
-    # -- Memcached Exporter Docker image tag
-    tag: v0.6.0
-    # -- Memcached Exporter Docker image pull policy
-    pullPolicy: IfNotPresent
-
-memcachedChunks:
+memcached-chunks:
   # -- Specifies whether the Memcached chunks cache should be enabled
   enabled: false
-  # -- Number of replicas for memcached-chunks
-  replicas: 1
-  # -- The name of the PriorityClass for memcached-chunks pods
-  priorityClassName: null
-  # -- Annotations for memcached-chunks pods
-  podAnnotations: {}
-  # -- Additional CLI args for memcached-chunks
-  extraArgs: []
-  # -- Environment variables to add to memcached-chunks pods
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to memcached-chunks pods
-  extraEnvFrom: []
-  # -- Resource requests and limits for memcached-chunks
-  resources: {}
-  # -- Grace period to allow memcached-chunks to shutdown before it is killed
-  terminationGracePeriodSeconds: 30
-  # -- Affinity for memcached-chunks pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.memcachedChunksSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.memcachedChunksSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for memcached-chunks pods
-  nodeSelector: {}
-  # -- Tolerations for memcached-chunks pods
-  tolerations: []
+  # -- Makes sure a StatefulSet is used and a headless service is created. Should not be changed!
+  architecture: high-availability
+  persistence:
+    # -- Persistence - used for dumping and restoring states between recreations. Not needed for Loki
+    enabled: false
 
-memcachedFrontend:
+memcached-frontend:
   # -- Specifies whether the Memcached frontend cache should be enabled
   enabled: false
-  # -- Number of replicas for memcached-frontend
-  replicas: 1
-  # -- The name of the PriorityClass for memcached-frontend pods
-  priorityClassName: null
-  # -- Annotations for memcached-frontend pods
-  podAnnotations: {}
-  # -- Additional CLI args for memcached-frontend
-  extraArgs: []
-  # -- Environment variables to add to memcached-frontend pods
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to memcached-frontend pods
-  extraEnvFrom: []
-  # -- Resource requests and limits for memcached-frontend
-  resources: {}
-  # -- Grace period to allow memcached-frontend to shutdown before it is killed
-  terminationGracePeriodSeconds: 30
-  # -- Affinity for memcached-frontend pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.memcachedFrontendSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.memcachedFrontendSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for memcached-frontend pods
-  nodeSelector: {}
-  # -- Tolerations for memcached-frontend pods
-  tolerations: []
+  # -- Makes sure a StatefulSet is used and a headless service is created. Should not be changed!
+  architecture: high-availability
+  persistence:
+    # -- Persistence - used for dumping and restoring states between recreations. Not needed for Loki
+    enabled: false
 
-memcachedIndexQueries:
+memcached-index-queries:
   # -- Specifies whether the Memcached index queries cache should be enabled
   enabled: false
-  # -- Number of replicas for memcached-index-queries
-  replicas: 1
-  # -- The name of the PriorityClass for memcached-index-queries pods
-  priorityClassName: null
-  # -- Annotations for memcached-index-queries pods
-  podAnnotations: {}
-  # -- Additional CLI args for memcached-index-queries
-  extraArgs: []
-  # -- Environment variables to add to memcached-index-queries pods
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to memcached-index-queries pods
-  extraEnvFrom: []
-  # -- Resource requests and limits for memcached-index-queries
-  resources: {}
-  # -- Grace period to allow memcached-index-queries to shutdown before it is killed
-  terminationGracePeriodSeconds: 30
-  # -- Affinity for memcached-index-queries pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.memcachedIndexQueriesSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.memcachedIndexQueriesSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for memcached-index-queries pods
-  nodeSelector: {}
-  # -- Tolerations for memcached-index-queries pods
-  tolerations: []
+  # -- Makes sure a StatefulSet is used and a headless service is created. Should not be changed!
+  architecture: high-availability
+  persistence:
+    # -- Persistence - used for dumping and restoring states between recreations. Not needed for Loki
+    enabled: false
 
-memcachedIndexWrites:
+memcached-index-writes:
   # -- Specifies whether the Memcached index writes cache should be enabled
   enabled: false
-  # -- Number of replicas for memcached-index-writes
-  replicas: 1
-  # -- The name of the PriorityClass for memcached-index-writes pods
-  priorityClassName: null
-  # -- Annotations for memcached-index-writes pods
-  podAnnotations: {}
-  # -- Additional CLI args for memcached-index-writes
-  extraArgs: []
-  # -- Environment variables to add to memcached-index-writes pods
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to memcached-index-writes pods
-  extraEnvFrom: []
-  # -- Resource requests and limits for memcached-index-writes
-  resources: {}
-  # -- Grace period to allow memcached-index-writes to shutdown before it is killed
-  terminationGracePeriodSeconds: 30
-  # -- Affinity for memcached-index-writes pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.memcachedIndexWritesSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.memcachedIndexWritesSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for memcached-index-writes pods
-  nodeSelector: {}
-  # -- Tolerations for memcached-index-writes pods
-  tolerations: []
+  # -- Makes sure a StatefulSet is used and a headless service is created. Should not be changed!
+  architecture: high-availability
+  persistence:
+    # -- Persistence - used for dumping and restoring states between recreations. Not needed for Loki
+    enabled: false

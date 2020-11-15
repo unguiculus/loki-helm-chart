@@ -1,6 +1,6 @@
 # loki-distributed
 
-![Version: 0.19.1](https://img.shields.io/badge/Version-0.19.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.0.0](https://img.shields.io/badge/AppVersion-2.0.0-informational?style=flat-square)
+![Version: 0.20.0](https://img.shields.io/badge/Version-0.20.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.0.0](https://img.shields.io/badge/AppVersion-2.0.0-informational?style=flat-square)
 
 Helm chart for Grafana Loki in microservices mode
 
@@ -115,65 +115,18 @@ helm repo add loki https://unguiculus.github.io/loki-helm-chart
 | loki.podAnnotations | object | `{}` | Common annotations for all pods |
 | loki.podSecurityContext | object | `{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001}` | The SecurityContext for Loki pods |
 | loki.revisionHistoryLimit | int | `10` | The number of old ReplicaSets to retain to allow rollback |
-| memcached.containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | The SecurityContext for memcached containers |
-| memcached.image.pullPolicy | string | `"IfNotPresent"` | Memcached Docker image pull policy |
-| memcached.image.registry | string | `"docker.io"` | The Docker registry for the memcached |
-| memcached.image.repository | string | `"memcached"` | Memcached Docker image repository |
-| memcached.image.tag | string | `"1.6.7-alpine"` | Memcached Docker image tag |
-| memcached.podSecurityContext | object | `{"fsGroup":11211,"runAsGroup":11211,"runAsNonRoot":true,"runAsUser":11211}` | The SecurityContext for memcached pods |
-| memcachedChunks.affinity | string | Hard node and soft zone anti-affinity | Affinity for memcached-chunks pods. Passed through `tpl` and, thus, to be configured as string |
-| memcachedChunks.enabled | bool | `false` | Specifies whether the Memcached chunks cache should be enabled |
-| memcachedChunks.extraArgs | list | `[]` | Additional CLI args for memcached-chunks |
-| memcachedChunks.extraEnv | list | `[]` | Environment variables to add to memcached-chunks pods |
-| memcachedChunks.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to memcached-chunks pods |
-| memcachedChunks.nodeSelector | object | `{}` | Node selector for memcached-chunks pods |
-| memcachedChunks.podAnnotations | object | `{}` | Annotations for memcached-chunks pods |
-| memcachedChunks.priorityClassName | string | `nil` | The name of the PriorityClass for memcached-chunks pods |
-| memcachedChunks.replicas | int | `1` | Number of replicas for memcached-chunks |
-| memcachedChunks.resources | object | `{}` | Resource requests and limits for memcached-chunks |
-| memcachedChunks.terminationGracePeriodSeconds | int | `30` | Grace period to allow memcached-chunks to shutdown before it is killed |
-| memcachedChunks.tolerations | list | `[]` | Tolerations for memcached-chunks pods |
-| memcachedExporter.enabled | bool | `false` | Specifies whether the Memcached Exporter should be enabled |
-| memcachedExporter.image.pullPolicy | string | `"IfNotPresent"` | Memcached Exporter Docker image pull policy |
-| memcachedExporter.image.registry | string | `"docker.io"` | The Docker registry for the Memcached Exporter |
-| memcachedExporter.image.repository | string | `"prom/memcached-exporter"` | Memcached Exporter Docker image repository |
-| memcachedExporter.image.tag | string | `"v0.6.0"` | Memcached Exporter Docker image tag |
-| memcachedFrontend.affinity | string | Hard node and soft zone anti-affinity | Affinity for memcached-frontend pods. Passed through `tpl` and, thus, to be configured as string |
-| memcachedFrontend.enabled | bool | `false` | Specifies whether the Memcached frontend cache should be enabled |
-| memcachedFrontend.extraArgs | list | `[]` | Additional CLI args for memcached-frontend |
-| memcachedFrontend.extraEnv | list | `[]` | Environment variables to add to memcached-frontend pods |
-| memcachedFrontend.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to memcached-frontend pods |
-| memcachedFrontend.nodeSelector | object | `{}` | Node selector for memcached-frontend pods |
-| memcachedFrontend.podAnnotations | object | `{}` | Annotations for memcached-frontend pods |
-| memcachedFrontend.priorityClassName | string | `nil` | The name of the PriorityClass for memcached-frontend pods |
-| memcachedFrontend.replicas | int | `1` | Number of replicas for memcached-frontend |
-| memcachedFrontend.resources | object | `{}` | Resource requests and limits for memcached-frontend |
-| memcachedFrontend.terminationGracePeriodSeconds | int | `30` | Grace period to allow memcached-frontend to shutdown before it is killed |
-| memcachedFrontend.tolerations | list | `[]` | Tolerations for memcached-frontend pods |
-| memcachedIndexQueries.affinity | string | Hard node and soft zone anti-affinity | Affinity for memcached-index-queries pods. Passed through `tpl` and, thus, to be configured as string |
-| memcachedIndexQueries.enabled | bool | `false` | Specifies whether the Memcached index queries cache should be enabled |
-| memcachedIndexQueries.extraArgs | list | `[]` | Additional CLI args for memcached-index-queries |
-| memcachedIndexQueries.extraEnv | list | `[]` | Environment variables to add to memcached-index-queries pods |
-| memcachedIndexQueries.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to memcached-index-queries pods |
-| memcachedIndexQueries.nodeSelector | object | `{}` | Node selector for memcached-index-queries pods |
-| memcachedIndexQueries.podAnnotations | object | `{}` | Annotations for memcached-index-queries pods |
-| memcachedIndexQueries.priorityClassName | string | `nil` | The name of the PriorityClass for memcached-index-queries pods |
-| memcachedIndexQueries.replicas | int | `1` | Number of replicas for memcached-index-queries |
-| memcachedIndexQueries.resources | object | `{}` | Resource requests and limits for memcached-index-queries |
-| memcachedIndexQueries.terminationGracePeriodSeconds | int | `30` | Grace period to allow memcached-index-queries to shutdown before it is killed |
-| memcachedIndexQueries.tolerations | list | `[]` | Tolerations for memcached-index-queries pods |
-| memcachedIndexWrites.affinity | string | Hard node and soft zone anti-affinity | Affinity for memcached-index-writes pods. Passed through `tpl` and, thus, to be configured as string |
-| memcachedIndexWrites.enabled | bool | `false` | Specifies whether the Memcached index writes cache should be enabled |
-| memcachedIndexWrites.extraArgs | list | `[]` | Additional CLI args for memcached-index-writes |
-| memcachedIndexWrites.extraEnv | list | `[]` | Environment variables to add to memcached-index-writes pods |
-| memcachedIndexWrites.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to memcached-index-writes pods |
-| memcachedIndexWrites.nodeSelector | object | `{}` | Node selector for memcached-index-writes pods |
-| memcachedIndexWrites.podAnnotations | object | `{}` | Annotations for memcached-index-writes pods |
-| memcachedIndexWrites.priorityClassName | string | `nil` | The name of the PriorityClass for memcached-index-writes pods |
-| memcachedIndexWrites.replicas | int | `1` | Number of replicas for memcached-index-writes |
-| memcachedIndexWrites.resources | object | `{}` | Resource requests and limits for memcached-index-writes |
-| memcachedIndexWrites.terminationGracePeriodSeconds | int | `30` | Grace period to allow memcached-index-writes to shutdown before it is killed |
-| memcachedIndexWrites.tolerations | list | `[]` | Tolerations for memcached-index-writes pods |
+| memcached-chunks.architecture | string | `"high-availability"` | Makes sure a StatefulSet is used and a headless service is created. Should not be changed! |
+| memcached-chunks.enabled | bool | `false` | Specifies whether the Memcached chunks cache should be enabled |
+| memcached-chunks.persistence.enabled | bool | `false` | Persistence - used for dumping and restoring states between recreations. Not needed for Loki |
+| memcached-frontend.architecture | string | `"high-availability"` | Makes sure a StatefulSet is used and a headless service is created. Should not be changed! |
+| memcached-frontend.enabled | bool | `false` | Specifies whether the Memcached frontend cache should be enabled |
+| memcached-frontend.persistence.enabled | bool | `false` | Persistence - used for dumping and restoring states between recreations. Not needed for Loki |
+| memcached-index-queries.architecture | string | `"high-availability"` | Makes sure a StatefulSet is used and a headless service is created. Should not be changed! |
+| memcached-index-queries.enabled | bool | `false` | Specifies whether the Memcached index queries cache should be enabled |
+| memcached-index-queries.persistence.enabled | bool | `false` | Persistence - used for dumping and restoring states between recreations. Not needed for Loki |
+| memcached-index-writes.architecture | string | `"high-availability"` | Makes sure a StatefulSet is used and a headless service is created. Should not be changed! |
+| memcached-index-writes.enabled | bool | `false` | Specifies whether the Memcached index writes cache should be enabled |
+| memcached-index-writes.persistence.enabled | bool | `false` | Persistence - used for dumping and restoring states between recreations. Not needed for Loki |
 | nameOverride | string | `nil` | Overrides the chart's name |
 | prometheusRule.annotations | object | `{}` | PrometheusRule annotations |
 | prometheusRule.enabled | bool | `false` | If enabled, a PrometheusRule resource for Prometheus Operator is created |
@@ -422,23 +375,23 @@ prometheusRule:
 ## Caching
 
 The chart can configure up to four Memcached instances for the various caches Lokis can use.
+Bitnami's [Memcached chart](https://github.com/bitnami/charts) is used for this as dependency.
+Please refer to its documentation for configuration details.
 Configuration works the same for all caches.
 The configuration of `memcached-chunks` below demonstrates setting additional options.
 
-Exporters for the Memcached instances can be configured as well.
-
-```yaml
-memcachedExporter:
-  enabled: true
-```
+Note that Memcached instances must be configured with `architecture=high-availability`.
+This is done by default and makes sure StatefulSets and a headless service are deployed.
+The headless service is required so Loki can discover all Memcached instances.
 
 ### memcached-chunks
 
 ```yaml
-memcachedChunks:
+memcached-chunks:
   enabled: true
-  replicas: 2
-  extraArgs:
+  replicaCount: 2
+  arguments:
+    - /run.sh
     - -m 2048
     - -I 2m
     - -v
@@ -449,6 +402,10 @@ memcachedChunks:
     limits:
       cpu: "2"
       memory: 3Gi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
 
 loki:
   config: |
@@ -466,7 +423,7 @@ loki:
 ### memcached-frontend
 
 ```yaml
-memcachedFrontend:
+memcached-frontend:
   enabled: true
 
 loki:
@@ -487,7 +444,7 @@ loki:
 ### memcached-index-queries
 
 ```yaml
-memcachedIndexQueries:
+memcached-index-queries:
   enabled: true
 
 loki:
@@ -508,7 +465,7 @@ loki:
 NOTE: This cache is not used with `boltdb-shipper` and should not be enabled in that case.
 
 ```yaml
-memcachedIndexWrite:
+memcached-index-writes:
   enabled: true
 
 loki:

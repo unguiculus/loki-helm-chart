@@ -19,15 +19,15 @@ Installed components:
 {{- if .Values.ruler.enabled }}
 * ruler
 {{- end }}
-{{- if .Values.memcachedChunks.enabled }}
+{{- if (index .Values "memcached-chunks").enabled }}
 * memcached-chunks
 {{- end }}
-{{- if .Values.memcachedFrontend.enabled }}
+{{- if (index .Values "memcached-frontend").enabled }}
 * memcached-frontend
 {{- end }}
-{{- if .Values.memcachedIndexQueries.enabled }}
+{{- if (index .Values "memcached-index-queries").enabled }}
 * memcached-index-queries
 {{- end }}
-{{- if .Values.memcachedIndexWrites.enabled }}
+{{- if (index .Values "memcached-index-writes").enabled }}
 * memcached-index-writes
 {{- end }}

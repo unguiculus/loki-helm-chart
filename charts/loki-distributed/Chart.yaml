@@ -3,7 +3,7 @@ name: loki-distributed
 description: Helm chart for Grafana Loki in microservices mode
 type: application
 appVersion: 2.0.0
-version: 0.19.1
+version: 0.20.0
 home: https://github.com/unguiculus/loki-helm-chart
 sources:
   - https://github.com/grafana/loki
@@ -12,3 +12,24 @@ sources:
 icon: https://grafana.com/docs/loki/latest/logo_and_name.png
 maintainers:
   - name: unguiculus
+dependencies:
+  - name: memcached
+    version: 5.2.x
+    repository: https://charts.bitnami.com/bitnami
+    alias: memcached-chunks
+    condition: memcached-chunks.enabled
+  - name: memcached
+    version: 5.2.x
+    repository: https://charts.bitnami.com/bitnami
+    alias: memcached-frontend
+    condition: memcached-frontend.enabled
+  - name: memcached
+    version: 5.2.x
+    repository: https://charts.bitnami.com/bitnami
+    alias: memcached-index-writes
+    condition: memcached-index-writes.enabled
+  - name: memcached
+    version: 5.2.x
+    repository: https://charts.bitnami.com/bitnami
+    alias: memcached-index-queries
+    condition: memcached-index-queries.enabled

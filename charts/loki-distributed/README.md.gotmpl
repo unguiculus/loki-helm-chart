@@ -8,8 +8,6 @@
 
 {{ template "chart.sourcesSection" . }}
 
-{{ template "chart.requirementsSection" . }}
-
 ## Chart Repo
 
 Add the following repo to use the chart:
@@ -187,23 +185,23 @@ prometheusRule:
 ## Caching
 
 The chart can configure up to four Memcached instances for the various caches Lokis can use.
+Bitnami's [Memcached chart](https://github.com/bitnami/charts) is used for this as dependency.
+Please refer to its documentation for configuration details.
 Configuration works the same for all caches.
 The configuration of `memcached-chunks` below demonstrates setting additional options.
 
-Exporters for the Memcached instances can be configured as well.
-
-```yaml
-memcachedExporter:
-  enabled: true
-```
+Note that Memcached instances must be configured with `architecture=high-availability`.
+This is done by default and makes sure StatefulSets and a headless service are deployed.
+The headless service is required so Loki can discover all Memcached instances.
 
 ### memcached-chunks
 
 ```yaml
-memcachedChunks:
+memcached-chunks:
   enabled: true
-  replicas: 2
-  extraArgs:
+  replicaCount: 2
+  arguments:
+    - /run.sh
     - -m 2048
     - -I 2m
     - -v
@@ -214,6 +212,10 @@ memcachedChunks:
     limits:
       cpu: "2"
       memory: 3Gi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
 
 loki:
   config: |
@@ -231,7 +233,7 @@ loki:
 ### memcached-frontend
 
 ```yaml
-memcachedFrontend:
+memcached-frontend:
   enabled: true
 
 loki:
@@ -252,7 +254,7 @@ loki:
 ### memcached-index-queries
 
 ```yaml
-memcachedIndexQueries:
+memcached-index-queries:
   enabled: true
 
 loki:
@@ -273,7 +275,7 @@ loki:
 NOTE: This cache is not used with `boltdb-shipper` and should not be enabled in that case.
 
 ```yaml
-memcachedIndexWrite:
+memcached-index-writes:
   enabled: true
 
 loki:

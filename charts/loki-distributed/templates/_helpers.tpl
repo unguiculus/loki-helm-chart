@@ -81,17 +81,33 @@ Docker image name
 {{- end -}}
 
 {{/*
-Memcached Docker image
+Create a fully qualified app name for the memcached-chunks requirement.
 */}}
-{{- define "loki.memcachedImage" -}}
-{{- $dict := dict "service" .Values.memcached.image "global" .Values.global.image -}}
-{{- include "loki.image" $dict -}}
+{{- define "loki.memcachedChunksFullname" -}}
+{{- $context := dict "Values" (index .Values "memcached-chunks") "Release" .Release "Chart" (dict "Name" "memcached-chunks") -}}
+{{ include "memcached.fullname" $context }}
 {{- end }}
 
 {{/*
-Memcached Exporter Docker image
+Create a fully qualified app name for the memcached-frontend requirement.
 */}}
-{{- define "loki.memcachedExporterImage" -}}
-{{- $dict := dict "service" .Values.memcachedExporter.image "global" .Values.global.image -}}
-{{- include "loki.image" $dict -}}
+{{- define "loki.memcachedFrontendFullname" -}}
+{{- $context := dict "Values" (index .Values "memcached-frontend") "Release" .Release "Chart" (dict "Name" "memcached-frontend") -}}
+{{ include "memcached.fullname" $context }}
+{{- end }}
+
+{{/*
+Create a fully qualified app name for the memcached-index-writes requirement.
+*/}}
+{{- define "loki.memcachedIndexWritesFullname" -}}
+{{- $context := dict "Values" (index .Values "memcached-index-writes") "Release" .Release "Chart" (dict "Name" "memcached-index-writes") -}}
+{{ include "memcached.fullname" $context }}
+{{- end }}
+
+{{/*
+Create a fully qualified app name for the memcached-index-queries requirement.
+*/}}
+{{- define "loki.memcachedIndexQueriesFullname" -}}
+{{- $context := dict "Values" (index .Values "memcached-index-queries") "Release" .Release "Chart" (dict "Name" "memcached-index-queries") -}}
+{{ include "memcached.fullname" $context }}
 {{- end }}
